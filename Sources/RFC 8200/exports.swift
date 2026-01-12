@@ -14,4 +14,4 @@
 // swift-rfc-8200
 
 @_exported public import RFC_4291
-@_exported public import INCITS_4_1986
+@_exported public import ASCII
