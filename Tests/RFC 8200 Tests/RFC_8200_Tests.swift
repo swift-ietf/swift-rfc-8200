@@ -18,21 +18,21 @@ struct RFC8200Tests {
 
     @Suite("Constants Tests")
     struct ConstantsTests {
-        @Test("Version is 6")
-        func versionIs6() {
+        @Test
+        func `Version is 6`() {
             #expect(RFC_8200.version == 6)
         }
 
-        @Test("Header size is 40 bytes")
-        func headerSizeIs40() {
+        @Test
+        func `Header size is 40 bytes`() {
             #expect(RFC_8200.headerSize == 40)
         }
     }
 
     @Suite("NextHeader Tests")
     struct NextHeaderTests {
-        @Test("Extension header values")
-        func extensionHeaders() {
+        @Test
+        func `Extension header values`() {
             #expect(RFC_8200.NextHeader.hopByHop.rawValue == 0)
             #expect(RFC_8200.NextHeader.routing.rawValue == 43)
             #expect(RFC_8200.NextHeader.fragment.rawValue == 44)
@@ -41,24 +41,24 @@ struct RFC8200Tests {
             #expect(RFC_8200.NextHeader.destinationOptions.rawValue == 60)
         }
 
-        @Test("Upper layer protocol values")
-        func upperLayerProtocols() {
+        @Test
+        func `Upper layer protocol values`() {
             #expect(RFC_8200.NextHeader.tcp.rawValue == 6)
             #expect(RFC_8200.NextHeader.udp.rawValue == 17)
             #expect(RFC_8200.NextHeader.icmpv6.rawValue == 58)
             #expect(RFC_8200.NextHeader.noNextHeader.rawValue == 59)
         }
 
-        @Test("Extension header classification")
-        func extensionHeaderClassification() {
+        @Test
+        func `Extension header classification`() {
             #expect(RFC_8200.NextHeader.hopByHop.isExtensionHeader == true)
             #expect(RFC_8200.NextHeader.fragment.isExtensionHeader == true)
             #expect(RFC_8200.NextHeader.tcp.isExtensionHeader == false)
             #expect(RFC_8200.NextHeader.udp.isExtensionHeader == false)
         }
 
-        @Test("Upper layer classification")
-        func upperLayerClassification() {
+        @Test
+        func `Upper layer classification`() {
             #expect(RFC_8200.NextHeader.tcp.isUpperLayerProtocol == true)
             #expect(RFC_8200.NextHeader.udp.isUpperLayerProtocol == true)
             #expect(RFC_8200.NextHeader.hopByHop.isUpperLayerProtocol == false)
@@ -68,38 +68,38 @@ struct RFC8200Tests {
 
     @Suite("TrafficClass Tests")
     struct TrafficClassTests {
-        @Test("Default is zero")
-        func defaultIsZero() {
+        @Test
+        func `Default is zero`() {
             #expect(RFC_8200.TrafficClass.default.rawValue == 0)
         }
 
-        @Test("DSCP and ECN extraction")
-        func dscpAndEcnExtraction() {
+        @Test
+        func `DSCP and ECN extraction`() {
             let tc = RFC_8200.TrafficClass(dscp: 46, ecn: 2)
             #expect(tc.dscp == 46)
             #expect(tc.ecn == 2)
         }
 
-        @Test("Expedited Forwarding")
-        func expeditedForwarding() {
+        @Test
+        func `Expedited Forwarding`() {
             #expect(RFC_8200.TrafficClass.ef.dscp == 46)
         }
     }
 
     @Suite("FlowLabel Tests")
     struct FlowLabelTests {
-        @Test("Zero flow label")
-        func zeroFlowLabel() {
+        @Test
+        func `Zero flow label`() {
             #expect(RFC_8200.FlowLabel.zero.rawValue == 0)
         }
 
-        @Test("Max flow label is 20 bits")
-        func maxFlowLabel() {
+        @Test
+        func `Max flow label is 20 bits`() {
             #expect(RFC_8200.FlowLabel.max.rawValue == 0xFFFFF)
         }
 
-        @Test("Values are masked to 20 bits")
-        func valuesMasked() {
+        @Test
+        func `Values are masked to 20 bits`() {
             let fl = RFC_8200.FlowLabel(rawValue: 0xFFFFFFFF)
             #expect(fl.rawValue == 0xFFFFF)
         }
@@ -107,8 +107,8 @@ struct RFC8200Tests {
 
     @Suite("Header Tests")
     struct HeaderTests {
-        @Test("Create basic header")
-        func createBasicHeader() {
+        @Test
+        func `Create basic header`() {
             let header = RFC_8200.Header(
                 trafficClass: .default,
                 flowLabel: .zero,
@@ -124,8 +124,8 @@ struct RFC8200Tests {
             #expect(header.hopLimit == 64)
         }
 
-        @Test("Serialize to 40 bytes")
-        func serializeTo40Bytes() {
+        @Test
+        func `Serialize to 40 bytes`() {
             let header = RFC_8200.Header(
                 trafficClass: .default,
                 flowLabel: .zero,
@@ -142,8 +142,8 @@ struct RFC8200Tests {
             #expect(buffer.count == 40)
         }
 
-        @Test("Version field is 6")
-        func versionFieldIs6() {
+        @Test
+        func `Version field is 6`() {
             let header = RFC_8200.Header(
                 payloadLength: 0,
                 nextHeader: .tcp,
@@ -159,8 +159,8 @@ struct RFC8200Tests {
             #expect(version == 6)
         }
 
-        @Test("Serialization round-trip")
-        func serializationRoundTrip() throws {
+        @Test
+        func `Serialization round-trip`() throws {
             let original = RFC_8200.Header(
                 trafficClass: RFC_8200.TrafficClass(dscp: 10, ecn: 1),
                 flowLabel: RFC_8200.FlowLabel(rawValue: 0x12345),
@@ -185,8 +185,8 @@ struct RFC8200Tests {
             #expect(parsed.destination == original.destination)
         }
 
-        @Test("Reject short buffer")
-        func rejectShortBuffer() {
+        @Test
+        func `Reject short buffer`() {
             let shortBuffer: [UInt8] = Array(repeating: 0, count: 39)
 
             #expect(throws: RFC_8200.Header.Error.self) {
@@ -194,8 +194,8 @@ struct RFC8200Tests {
             }
         }
 
-        @Test("Reject wrong version")
-        func rejectWrongVersion() {
+        @Test
+        func `Reject wrong version`() {
             var buffer: [UInt8] = Array(repeating: 0, count: 40)
             buffer[0] = 0x40 // Version 4 instead of 6
 
@@ -207,8 +207,8 @@ struct RFC8200Tests {
 
     @Suite("Fragment Header Tests")
     struct FragmentHeaderTests {
-        @Test("Create fragment header")
-        func createFragmentHeader() {
+        @Test
+        func `Create fragment header`() {
             let fragment = RFC_8200.Extension.Fragment(
                 nextHeader: .tcp,
                 fragmentOffset: 100,
@@ -222,8 +222,8 @@ struct RFC8200Tests {
             #expect(fragment.identification == 0x12345678)
         }
 
-        @Test("Serialize fragment header to 8 bytes")
-        func serializeFragmentTo8Bytes() {
+        @Test
+        func `Serialize fragment header to 8 bytes`() {
             let fragment = RFC_8200.Extension.Fragment(
                 nextHeader: .tcp,
                 fragmentOffset: 0,
