@@ -136,7 +136,7 @@ struct RFC8200Tests {
                 destination: .loopback
             )
 
-            var buffer: [UInt8] = []
+            var buffer: [Byte] = []
             RFC_8200.Header.serialize(header, into: &buffer)
 
             #expect(buffer.count == 40)
@@ -152,7 +152,7 @@ struct RFC8200Tests {
                 destination: .loopback
             )
 
-            var buffer: [UInt8] = []
+            var buffer: [Byte] = []
             RFC_8200.Header.serialize(header, into: &buffer)
 
             let version = (buffer[0] >> 4) & 0x0F
@@ -171,7 +171,7 @@ struct RFC8200Tests {
                 destination: RFC_4291.IPv6.Address(0x2001, 0xdb8, 0, 0, 0, 0, 0, 2)
             )
 
-            var buffer: [UInt8] = []
+            var buffer: [Byte] = []
             RFC_8200.Header.serialize(original, into: &buffer)
 
             let parsed = try RFC_8200.Header(binary: buffer)
@@ -187,7 +187,7 @@ struct RFC8200Tests {
 
         @Test
         func `Reject short buffer`() {
-            let shortBuffer: [UInt8] = Array(repeating: 0, count: 39)
+            let shortBuffer: [Byte] = Array(repeating: 0, count: 39)
 
             #expect(throws: RFC_8200.Header.Error.self) {
                 try RFC_8200.Header(binary: shortBuffer)
@@ -196,7 +196,7 @@ struct RFC8200Tests {
 
         @Test
         func `Reject wrong version`() {
-            var buffer: [UInt8] = Array(repeating: 0, count: 40)
+            var buffer: [Byte] = Array(repeating: 0, count: 40)
             buffer[0] = 0x40 // Version 4 instead of 6
 
             #expect(throws: RFC_8200.Header.Error.self) {
@@ -231,7 +231,7 @@ struct RFC8200Tests {
                 identification: 0
             )
 
-            var buffer: [UInt8] = []
+            var buffer: [Byte] = []
             RFC_8200.Extension.Fragment.serialize(fragment, into: &buffer)
 
             #expect(buffer.count == 8)

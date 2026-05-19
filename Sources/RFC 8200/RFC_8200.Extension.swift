@@ -107,25 +107,24 @@ extension RFC_8200.Extension.Fragment: Binary.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ fragment: Self,
         into buffer: inout Buffer
-    ) where Buffer.Element == UInt8 {
-        // Byte 0: Next Header
-        buffer.append(fragment.nextHeader.rawValue)
+    ) where Buffer.Element == Byte {
+        // Byte 0: Next Header. NextHeader.rawValue stays UInt8 (separate
+        // file out of arc scope); bridge via Byte() at the boundary.
+        buffer.append(Byte(fragment.nextHeader.rawValue))
 
         // Byte 1: Reserved
         buffer.append(0)
 
         // Bytes 2-3: Fragment Offset (13 bits) | Res (2 bits) | M flag (1 bit)
+        // UInt16 arithmetic-domain via Byte-primary bytes(endianness:).
         var offsetFlags = fragment.fragmentOffset << 3
         if fragment.moreFragments {
             offsetFlags |= 0x0001
         }
-        buffer.append(UInt8(offsetFlags >> 8))
-        buffer.append(UInt8(offsetFlags & 0xFF))
+        buffer.append(contentsOf: offsetFlags.bytes(endianness: .big))
 
-        // Bytes 4-7: Identification
-        buffer.append(UInt8((fragment.identification >> 24) & 0xFF))
-        buffer.append(UInt8((fragment.identification >> 16) & 0xFF))
-        buffer.append(UInt8((fragment.identification >> 8) & 0xFF))
-        buffer.append(UInt8(fragment.identification & 0xFF))
+        // Bytes 4-7: Identification (UInt32 arithmetic-domain) via Byte-primary
+        // BinaryInteger.bytes(endianness:).
+        buffer.append(contentsOf: fragment.identification.bytes(endianness: .big))
     }
 }

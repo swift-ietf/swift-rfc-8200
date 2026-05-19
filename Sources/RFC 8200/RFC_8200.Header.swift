@@ -107,34 +107,35 @@ extension RFC_8200.Header: Binary.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ header: Self,
         into buffer: inout Buffer
-    ) where Buffer.Element == UInt8 {
+    ) where Buffer.Element == Byte {
         buffer.reserveCapacity(buffer.count + 40)
 
         // First 4 bytes: Version (4) | Traffic Class (8) | Flow Label (20)
-        // Version is always 6
+        // Version is always 6. Internal arithmetic-domain UInt8/UInt32
+        // bitwise calculation; Byte() bridge at the buffer.append boundary.
         let version: UInt8 = 6
         let tc = header.trafficClass.rawValue
         let fl = header.flowLabel.rawValue
 
         // Byte 0: Version (4 bits) | Traffic Class high 4 bits
-        buffer.append((version << 4) | (tc >> 4))
+        buffer.append(Byte((version << 4) | (tc >> 4)))
 
         // Byte 1: Traffic Class low 4 bits | Flow Label high 4 bits
-        buffer.append(((tc & 0x0F) << 4) | UInt8((fl >> 16) & 0x0F))
+        buffer.append(Byte(((tc & 0x0F) << 4) | UInt8((fl >> 16) & 0x0F)))
 
         // Bytes 2-3: Flow Label low 16 bits
-        buffer.append(UInt8((fl >> 8) & 0xFF))
-        buffer.append(UInt8(fl & 0xFF))
+        buffer.append(Byte(UInt8((fl >> 8) & 0xFF)))
+        buffer.append(Byte(UInt8(fl & 0xFF)))
 
-        // Bytes 4-5: Payload Length
-        buffer.append(UInt8(header.payloadLength >> 8))
-        buffer.append(UInt8(header.payloadLength & 0xFF))
+        // Bytes 4-5: Payload Length (UInt16 arithmetic-domain) via Byte-primary
+        // BinaryInteger.bytes(endianness:).
+        buffer.append(contentsOf: header.payloadLength.bytes(endianness: .big))
 
         // Byte 6: Next Header
-        buffer.append(header.nextHeader.rawValue)
+        buffer.append(Byte(header.nextHeader.rawValue))
 
-        // Byte 7: Hop Limit
-        buffer.append(header.hopLimit)
+        // Byte 7: Hop Limit (arithmetic-domain UInt8, decremented per hop)
+        buffer.append(Byte(header.hopLimit))
 
         // Bytes 8-23: Source Address (16 bytes)
         RFC_4291.IPv6.Address.serialize(header.source, into: &buffer)
@@ -148,15 +149,17 @@ extension RFC_8200.Header: Binary.Serializable {
     /// - Parameter bytes: At least 40 bytes
     /// - Throws: `Error` if bytes are malformed
     public init<Bytes: Collection>(binary bytes: Bytes) throws(Error)
-    where Bytes.Element == UInt8 {
+    where Bytes.Element == Byte {
         guard bytes.count >= 40 else {
             throw Error.invalidLength(bytes.count)
         }
 
         var iterator = bytes.makeIterator()
 
+        // Internal arithmetic-domain UInt8 byte stream; bridge from Byte at
+        // the conformance boundary via .underlying.
         func next() -> UInt8 {
-            iterator.next()!
+            iterator.next()!.underlying
         }
 
         // First 4 bytes
@@ -190,11 +193,12 @@ extension RFC_8200.Header: Binary.Serializable {
         // Hop Limit (8 bits)
         self.hopLimit = next()
 
-        // Source Address (128 bits / 16 bytes)
-        var sourceBytes: [UInt8] = []
+        // Source Address (128 bits / 16 bytes). Internal buffer typed [Byte]
+        // for the byte-domain IPv6.Address(binary:) conformance.
+        var sourceBytes: [Byte] = []
         sourceBytes.reserveCapacity(16)
         for _ in 0..<16 {
-            sourceBytes.append(next())
+            sourceBytes.append(Byte(next()))
         }
         do {
             self.source = try RFC_4291.IPv6.Address(binary: sourceBytes)
@@ -203,10 +207,10 @@ extension RFC_8200.Header: Binary.Serializable {
         }
 
         // Destination Address (128 bits / 16 bytes)
-        var destBytes: [UInt8] = []
+        var destBytes: [Byte] = []
         destBytes.reserveCapacity(16)
         for _ in 0..<16 {
-            destBytes.append(next())
+            destBytes.append(Byte(next()))
         }
         do {
             self.destination = try RFC_4291.IPv6.Address(binary: destBytes)
