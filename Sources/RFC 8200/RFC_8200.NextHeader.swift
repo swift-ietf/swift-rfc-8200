@@ -89,6 +89,11 @@ extension RFC_8200 {
         /// ICMPv6 (58)
         public static let icmpv6 = Self(__unchecked: (), rawValue: 58)
 
+        // swift-format-ignore: DontRepeatTypeInStaticProperties
+        // Reason: retains the IANA-registered "No Next Header" terminology
+        // (RFC 8200 Section 4.7, protocol number 59); shortening to `.no`
+        // would be non-descriptive and a breaking public API rename outside
+        // lint-drain scope.
         /// No Next Header (59)
         ///
         /// Indicates that there is no next header. The payload length

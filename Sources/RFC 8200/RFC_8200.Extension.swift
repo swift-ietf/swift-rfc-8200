@@ -96,7 +96,7 @@ extension RFC_8200.Extension {
             identification: UInt32
         ) {
             self.nextHeader = nextHeader
-            self.fragmentOffset = fragmentOffset & 0x1FFF // 13 bits max
+            self.fragmentOffset = fragmentOffset & 0x1FFF  // 13 bits max
             self.moreFragments = moreFragments
             self.identification = identification
         }

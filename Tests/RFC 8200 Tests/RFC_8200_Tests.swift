@@ -100,7 +100,7 @@ struct RFC8200Tests {
 
         @Test
         func `Values are masked to 20 bits`() {
-            let fl = RFC_8200.FlowLabel(rawValue: 0xFFFFFFFF)
+            let fl = RFC_8200.FlowLabel(rawValue: 0xFFFF_FFFF)
             #expect(fl.rawValue == 0xFFFFF)
         }
     }
@@ -197,7 +197,7 @@ struct RFC8200Tests {
         @Test
         func `Reject wrong version`() {
             var buffer: [Byte] = Array(repeating: 0, count: 40)
-            buffer[0] = 0x40 // Version 4 instead of 6
+            buffer[0] = 0x40  // Version 4 instead of 6
 
             #expect(throws: RFC_8200.Header.Error.self) {
                 try RFC_8200.Header(binary: buffer)
@@ -213,13 +213,13 @@ struct RFC8200Tests {
                 nextHeader: .tcp,
                 fragmentOffset: 100,
                 moreFragments: true,
-                identification: 0x12345678
+                identification: 0x1234_5678
             )
 
             #expect(fragment.nextHeader == .tcp)
             #expect(fragment.fragmentOffset == 100)
             #expect(fragment.moreFragments == true)
-            #expect(fragment.identification == 0x12345678)
+            #expect(fragment.identification == 0x1234_5678)
         }
 
         @Test
