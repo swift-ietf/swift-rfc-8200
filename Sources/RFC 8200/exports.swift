@@ -13,5 +13,6 @@
 // exports.swift
 // swift-rfc-8200
 
-@_exported public import RFC_4291
 @_exported public import ASCII_Primitives
+@_exported public import RFC_4291
+@_exported public import RFC_5952

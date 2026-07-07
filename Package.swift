@@ -9,6 +9,7 @@ extension String {
 extension Target.Dependency {
     static var rfc8200: Self { .target(name: .rfc8200) }
     static var rfc4291: Self { .product(name: "RFC 4291", package: "swift-rfc-4291") }
+    static var rfc5952: Self { .product(name: "RFC 5952", package: "swift-rfc-5952") }
     static var standards: Self { .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions") }
     static var incits41986: Self { .product(name: "ASCII Primitives", package: "swift-ascii-primitives") }
 }
@@ -27,6 +28,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swift-ietf/swift-rfc-4291.git", branch: "main"),
+        .package(url: "https://github.com/swift-ietf/swift-rfc-5952.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-standard-library-extensions.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-ascii-primitives.git", branch: "main")
     ],
@@ -35,6 +37,7 @@ let package = Package(
             name: "RFC 8200",
             dependencies: [
                 .rfc4291,
+                .rfc5952,
                 .standards,
                 .incits41986
             ]
