@@ -1,35 +1,10 @@
 # swift-rfc-8200
 
-![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
+Use this package when you need to read or write the fixed 40-byte header of an IPv6 packet, or write a Fragment extension header. Start from `RFC_8200.Header`. For IPv4 packets, use swift-rfc-791. For the IPv6 address type itself, use swift-rfc-4291.
 
-The IPv6 header and extension-header format of RFC 8200.
+## Laws
 
-## Standard Reference
-
-- **RFC**: 8200
-- **Title**: Internet Protocol, Version 6 (IPv6) Specification
-
-## Installation
-
-Add the package to your `Package.swift` dependencies:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/swift-ietf/swift-rfc-8200.git", from: "0.0.1")
-]
-```
-
-Add the product to a target that needs it:
-
-```swift
-.target(
-    name: "YourTarget",
-    dependencies: [
-        .product(name: "RFC 8200", package: "swift-rfc-8200")
-    ]
-)
-```
-
-## License
-
-Apache 2.0. See [LICENSE.md](LICENSE.md).
+- Decoding a header needs at least 40 bytes and a version field of 6. Anything else is refused.
+- Decoding reads only the first 40 bytes. The bytes after them, such as extension headers and payload, are left alone and are not checked against the payload length.
+- Fields wider than the wire format are cut to fit rather than refused. A flow label keeps its low 20 bits, so `0xFFFF_FFFF` becomes `0xFFFFF`. A fragment offset keeps its low 13 bits, a DSCP its low 6 bits and an ECN value its low 2 bits.
+- `RFC_8200.NextHeader.isUpperLayerProtocol` is true for every value that isn't a known extension header or No Next Header, including values with no assigned protocol.
