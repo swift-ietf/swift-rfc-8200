@@ -15,6 +15,8 @@
 //
 // RFC 8200 Section 3: IPv6 Header Format
 
+public import Binary
+public import Byte
 public import RFC_4291
 
 extension RFC_8200 {
@@ -148,7 +150,7 @@ extension RFC_8200.Header: Binary.Serializable {
     ///
     /// - Parameter bytes: At least 40 bytes
     /// - Throws: `Error` if bytes are malformed
-    public init<Bytes: Collection>(binary bytes: Bytes) throws(Error)
+    public init<Bytes: Swift::Collection>(binary bytes: Bytes) throws(Error)
     where Bytes.Element == Byte {
         guard bytes.count >= 40 else {
             throw Error.invalidLength(bytes.count)
@@ -157,9 +159,9 @@ extension RFC_8200.Header: Binary.Serializable {
         var iterator = bytes.makeIterator()
 
         // Internal arithmetic-domain UInt8 byte stream; bridge from Byte at
-        // the conformance boundary via .underlying.
+        // the conformance boundary via .bitPattern.
         func next() -> UInt8 {
-            iterator.next()!.underlying
+            iterator.next()!.bitPattern
         }
 
         // First 4 bytes
@@ -200,7 +202,7 @@ extension RFC_8200.Header: Binary.Serializable {
         for _ in 0..<16 {
             sourceBytes.append(Byte(next()))
         }
-        do {
+        do throws(RFC_4291.IPv6.Address.Error) {
             self.source = try RFC_4291.IPv6.Address(binary: sourceBytes)
         } catch {
             throw Error.invalidSourceAddress(error)
@@ -212,46 +214,10 @@ extension RFC_8200.Header: Binary.Serializable {
         for _ in 0..<16 {
             destBytes.append(Byte(next()))
         }
-        do {
+        do throws(RFC_4291.IPv6.Address.Error) {
             self.destination = try RFC_4291.IPv6.Address(binary: destBytes)
         } catch {
             throw Error.invalidDestinationAddress(error)
         }
-    }
-}
-
-// MARK: - Codable
-
-extension RFC_8200.Header: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case trafficClass
-        case flowLabel
-        case payloadLength
-        case nextHeader
-        case hopLimit
-        case source
-        case destination
-    }
-
-    public init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.trafficClass = try container.decode(RFC_8200.TrafficClass.self, forKey: .trafficClass)
-        self.flowLabel = try container.decode(RFC_8200.FlowLabel.self, forKey: .flowLabel)
-        self.payloadLength = try container.decode(UInt16.self, forKey: .payloadLength)
-        self.nextHeader = try container.decode(RFC_8200.NextHeader.self, forKey: .nextHeader)
-        self.hopLimit = try container.decode(UInt8.self, forKey: .hopLimit)
-        self.source = try container.decode(RFC_4291.IPv6.Address.self, forKey: .source)
-        self.destination = try container.decode(RFC_4291.IPv6.Address.self, forKey: .destination)
-    }
-
-    public func encode(to encoder: any Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(trafficClass, forKey: .trafficClass)
-        try container.encode(flowLabel, forKey: .flowLabel)
-        try container.encode(payloadLength, forKey: .payloadLength)
-        try container.encode(nextHeader, forKey: .nextHeader)
-        try container.encode(hopLimit, forKey: .hopLimit)
-        try container.encode(source, forKey: .source)
-        try container.encode(destination, forKey: .destination)
     }
 }

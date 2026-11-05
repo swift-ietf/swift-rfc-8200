@@ -15,6 +15,9 @@
 //
 // RFC 8200 Section 4: IPv6 Extension Headers
 
+public import Binary
+public import Byte
+
 extension RFC_8200 {
     /// Extension headers namespace
     ///
@@ -113,7 +116,7 @@ extension RFC_8200.Extension.Fragment: Binary.Serializable {
         buffer.append(Byte(fragment.nextHeader.rawValue))
 
         // Byte 1: Reserved
-        buffer.append(0)
+        buffer.append(Byte(0))
 
         // Bytes 2-3: Fragment Offset (13 bits) | Res (2 bits) | M flag (1 bit)
         // UInt16 arithmetic-domain via Byte-primary bytes(endianness:).

@@ -155,7 +155,7 @@ struct RFC8200Tests {
             var buffer: [Byte] = []
             RFC_8200.Header.serialize(header, into: &buffer)
 
-            let version = (buffer[0] >> 4) & 0x0F
+            let version = (buffer[0].bitPattern >> 4) & 0x0F
             #expect(version == 6)
         }
 
@@ -187,7 +187,7 @@ struct RFC8200Tests {
 
         @Test
         func `Reject short buffer`() {
-            let shortBuffer: [Byte] = Array(repeating: 0, count: 39)
+            let shortBuffer: [Byte] = Array(repeating: Byte(0), count: 39)
 
             #expect(throws: RFC_8200.Header.Error.self) {
                 try RFC_8200.Header(binary: shortBuffer)
@@ -196,8 +196,8 @@ struct RFC8200Tests {
 
         @Test
         func `Reject wrong version`() {
-            var buffer: [Byte] = Array(repeating: 0, count: 40)
-            buffer[0] = 0x40  // Version 4 instead of 6
+            var buffer: [Byte] = Array(repeating: Byte(0), count: 40)
+            buffer[0] = Byte(0x40)  // Version 4 instead of 6
 
             #expect(throws: RFC_8200.Header.Error.self) {
                 try RFC_8200.Header(binary: buffer)
