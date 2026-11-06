@@ -37,7 +37,7 @@ let package = Package(
         .testTarget(
             name: "RFC 8200 Tests",
             dependencies: [
-                "RFC 8200"
+                .target(name: "RFC 8200")
             ]
         ),
     ],
