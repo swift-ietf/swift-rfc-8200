@@ -1,5 +1,5 @@
-public import Binary
-public import Byte
+import Binary
+import Byte
 
 
 extension RFC_8200.Extension {
