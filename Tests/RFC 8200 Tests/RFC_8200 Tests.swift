@@ -13,11 +13,11 @@
 import Testing
 @testable import RFC_8200
 
-@Suite("RFC 8200 IPv6 Packet Tests")
-struct RFC8200Tests {
+@Suite
+struct `RFC 8200 IPv6 Packet Tests` {
 
-    @Suite("Constants Tests")
-    struct ConstantsTests {
+    @Suite
+    struct `Constants Tests` {
         @Test
         func `Version is 6`() {
             #expect(RFC_8200.version == 6)
@@ -29,8 +29,8 @@ struct RFC8200Tests {
         }
     }
 
-    @Suite("NextHeader Tests")
-    struct NextHeaderTests {
+    @Suite
+    struct `NextHeader Tests` {
         @Test
         func `Extension header values`() {
             #expect(RFC_8200.NextHeader.hopByHop.rawValue == 0)
@@ -66,8 +66,8 @@ struct RFC8200Tests {
         }
     }
 
-    @Suite("TrafficClass Tests")
-    struct TrafficClassTests {
+    @Suite
+    struct `TrafficClass Tests` {
         @Test
         func `Default is zero`() {
             #expect(RFC_8200.TrafficClass.default.rawValue == 0)
@@ -86,8 +86,8 @@ struct RFC8200Tests {
         }
     }
 
-    @Suite("FlowLabel Tests")
-    struct FlowLabelTests {
+    @Suite
+    struct `FlowLabel Tests` {
         @Test
         func `Zero flow label`() {
             #expect(RFC_8200.FlowLabel.zero.rawValue == 0)
@@ -105,8 +105,8 @@ struct RFC8200Tests {
         }
     }
 
-    @Suite("Header Tests")
-    struct HeaderTests {
+    @Suite
+    struct `Header Tests` {
         @Test
         func `Create basic header`() {
             let header = RFC_8200.Header(
@@ -205,8 +205,8 @@ struct RFC8200Tests {
         }
     }
 
-    @Suite("Fragment Header Tests")
-    struct FragmentHeaderTests {
+    @Suite
+    struct `Fragment Header Tests` {
         @Test
         func `Create fragment header`() {
             let fragment = RFC_8200.Extension.Fragment(
