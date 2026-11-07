@@ -1,24 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_8200.swift
-// swift-rfc-8200
-//
-// RFC 8200: Internet Protocol, Version 6 (IPv6) Specification (July 2017)
-// https://www.rfc-editor.org/rfc/rfc8200.html
-//
-// This package implements the IPv6 packet format as defined by RFC 8200.
-// RFC 8200 obsoletes RFC 2460.
-
 /// RFC 8200: Internet Protocol, Version 6 (IPv6) Specification
 ///
 /// This namespace contains types for the IPv6 packet format as defined

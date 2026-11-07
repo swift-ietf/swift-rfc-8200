@@ -1,20 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_8200.Extension.swift
-// swift-rfc-8200
-//
-// RFC 8200 Section 4: IPv6 Extension Headers
-
 public import Binary
 public import Byte
 
@@ -99,7 +82,7 @@ extension RFC_8200.Extension {
             identification: UInt32
         ) {
             self.nextHeader = nextHeader
-            self.fragmentOffset = fragmentOffset & 0x1FFF  // 13 bits max
+            self.fragmentOffset = fragmentOffset & 0x1FFF
             self.moreFragments = moreFragments
             self.identification = identification
         }
@@ -111,23 +94,16 @@ extension RFC_8200.Extension.Fragment: Binary.Serializable {
         _ fragment: Self,
         into buffer: inout Buffer
     ) where Buffer.Element == Byte {
-        // Byte 0: Next Header. NextHeader.rawValue stays UInt8 (separate
-        // file out of arc scope); bridge via Byte() at the boundary.
         buffer.append(Byte(fragment.nextHeader.rawValue))
 
-        // Byte 1: Reserved
         buffer.append(Byte(0))
 
-        // Bytes 2-3: Fragment Offset (13 bits) | Res (2 bits) | M flag (1 bit)
-        // UInt16 arithmetic-domain via Byte-primary bytes(endianness:).
         var offsetFlags = fragment.fragmentOffset << 3
         if fragment.moreFragments {
             offsetFlags |= 0x0001
         }
         buffer.append(contentsOf: offsetFlags.bytes(endianness: .big))
 
-        // Bytes 4-7: Identification (UInt32 arithmetic-domain) via Byte-primary
-        // BinaryInteger.bytes(endianness:).
         buffer.append(contentsOf: fragment.identification.bytes(endianness: .big))
     }
 }

@@ -1,20 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_8200.TrafficClass.swift
-// swift-rfc-8200
-//
-// RFC 8200 Section 7: Traffic Class
-
 extension RFC_8200 {
     /// Traffic Class field (8 bits)
     ///
@@ -60,12 +43,8 @@ extension RFC_8200 {
             rawValue & 0x03
         }
 
-        // MARK: - Common Values
-
         /// Default traffic class (0)
         public static let `default` = Self(rawValue: 0)
-
-        // MARK: - DSCP Values (RFC 2474, RFC 2597, RFC 3246)
 
         /// Class Selector 0 (Best Effort)
         public static let cs0 = Self(dscp: 0, ecn: 0)
@@ -93,8 +72,6 @@ extension RFC_8200 {
 
         /// Expedited Forwarding (RFC 3246)
         public static let ef = Self(dscp: 46, ecn: 0)
-
-        // MARK: - ECN Values (RFC 3168)
 
         /// Not ECN-Capable Transport
         public static let notECT: UInt8 = 0

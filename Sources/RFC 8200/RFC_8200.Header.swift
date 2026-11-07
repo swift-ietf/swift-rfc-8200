@@ -1,20 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_8200.Header.swift
-// swift-rfc-8200
-//
-// RFC 8200 Section 3: IPv6 Header Format
-
 public import Binary
 public import Byte
 public import RFC_4291
@@ -102,8 +85,6 @@ extension RFC_8200 {
     }
 }
 
-// MARK: - Binary.Serializable
-
 extension RFC_8200.Header: Binary.Serializable {
     /// Serializes the IPv6 header to wire format (40 bytes)
     public static func serialize<Buffer: RangeReplaceableCollection>(
@@ -112,37 +93,25 @@ extension RFC_8200.Header: Binary.Serializable {
     ) where Buffer.Element == Byte {
         buffer.reserveCapacity(buffer.count + 40)
 
-        // First 4 bytes: Version (4) | Traffic Class (8) | Flow Label (20)
-        // Version is always 6. Internal arithmetic-domain UInt8/UInt32
-        // bitwise calculation; Byte() bridge at the buffer.append boundary.
         let version: UInt8 = 6
         let tc = header.trafficClass.rawValue
         let fl = header.flowLabel.rawValue
 
-        // Byte 0: Version (4 bits) | Traffic Class high 4 bits
         buffer.append(Byte((version << 4) | (tc >> 4)))
 
-        // Byte 1: Traffic Class low 4 bits | Flow Label high 4 bits
         buffer.append(Byte(((tc & 0x0F) << 4) | UInt8((fl >> 16) & 0x0F)))
 
-        // Bytes 2-3: Flow Label low 16 bits
         buffer.append(Byte(UInt8((fl >> 8) & 0xFF)))
         buffer.append(Byte(UInt8(fl & 0xFF)))
 
-        // Bytes 4-5: Payload Length (UInt16 arithmetic-domain) via Byte-primary
-        // BinaryInteger.bytes(endianness:).
         buffer.append(contentsOf: header.payloadLength.bytes(endianness: .big))
 
-        // Byte 6: Next Header
         buffer.append(Byte(header.nextHeader.rawValue))
 
-        // Byte 7: Hop Limit (arithmetic-domain UInt8, decremented per hop)
         buffer.append(Byte(header.hopLimit))
 
-        // Bytes 8-23: Source Address (16 bytes)
         RFC_4291.IPv6.Address.serialize(header.source, into: &buffer)
 
-        // Bytes 24-39: Destination Address (16 bytes)
         RFC_4291.IPv6.Address.serialize(header.destination, into: &buffer)
     }
 
@@ -158,45 +127,34 @@ extension RFC_8200.Header: Binary.Serializable {
 
         var iterator = bytes.makeIterator()
 
-        // Internal arithmetic-domain UInt8 byte stream; bridge from Byte at
-        // the conformance boundary via .bitPattern.
         func next() -> UInt8 {
             iterator.next()!.bitPattern
         }
 
-        // First 4 bytes
         let byte0 = next()
         let byte1 = next()
         let byte2 = next()
         let byte3 = next()
 
-        // Version (4 bits)
         let version = (byte0 >> 4) & 0x0F
         guard version == 6 else {
             throw Error.invalidVersion(version)
         }
 
-        // Traffic Class (8 bits spanning bytes 0-1)
         let tc = ((byte0 & 0x0F) << 4) | ((byte1 >> 4) & 0x0F)
         self.trafficClass = RFC_8200.TrafficClass(rawValue: tc)
 
-        // Flow Label (20 bits spanning bytes 1-3)
         let fl = (UInt32(byte1 & 0x0F) << 16) | (UInt32(byte2) << 8) | UInt32(byte3)
         self.flowLabel = RFC_8200.FlowLabel(rawValue: fl)
 
-        // Payload Length (16 bits)
         let pl0 = next()
         let pl1 = next()
         self.payloadLength = (UInt16(pl0) << 8) | UInt16(pl1)
 
-        // Next Header (8 bits)
         self.nextHeader = RFC_8200.NextHeader(rawValue: next())
 
-        // Hop Limit (8 bits)
         self.hopLimit = next()
 
-        // Source Address (128 bits / 16 bytes). Internal buffer typed [Byte]
-        // for the byte-domain IPv6.Address(binary:) conformance.
         var sourceBytes: [Byte] = []
         sourceBytes.reserveCapacity(16)
         for _ in 0..<16 {
@@ -208,7 +166,6 @@ extension RFC_8200.Header: Binary.Serializable {
             throw Error.invalidSourceAddress(error)
         }
 
-        // Destination Address (128 bits / 16 bytes)
         var destBytes: [Byte] = []
         destBytes.reserveCapacity(16)
         for _ in 0..<16 {

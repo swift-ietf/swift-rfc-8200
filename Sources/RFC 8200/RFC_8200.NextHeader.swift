@@ -1,20 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_8200.NextHeader.swift
-// swift-rfc-8200
-//
-// RFC 8200 Section 3: IPv6 Header Format - Next Header Field
-
 extension RFC_8200 {
     /// Next Header field values
     ///
@@ -49,8 +32,6 @@ extension RFC_8200 {
             self.rawValue = rawValue
         }
 
-        // MARK: - Extension Headers
-
         /// Hop-by-Hop Options (0)
         public static let hopByHop = Self(__unchecked: (), rawValue: 0)
 
@@ -78,8 +59,6 @@ extension RFC_8200 {
         /// Shim6 Protocol (140)
         public static let shim6 = Self(__unchecked: (), rawValue: 140)
 
-        // MARK: - Upper Layer Protocols
-
         /// TCP (6)
         public static let tcp = Self(__unchecked: (), rawValue: 6)
 
@@ -90,10 +69,6 @@ extension RFC_8200 {
         public static let icmpv6 = Self(__unchecked: (), rawValue: 58)
 
         // swift-format-ignore: DontRepeatTypeInStaticProperties
-        // Reason: retains the IANA-registered "No Next Header" terminology
-        // (RFC 8200 Section 4.7, protocol number 59); shortening to `.no`
-        // would be non-descriptive and a breaking public API rename outside
-        // lint-drain scope.
         /// No Next Header (59)
         ///
         /// Indicates that there is no next header. The payload length
@@ -105,8 +80,6 @@ extension RFC_8200 {
 
         /// SCTP (132)
         public static let sctp = Self(__unchecked: (), rawValue: 132)
-
-        // MARK: - Classification
 
         /// Whether this is an extension header
         public var isExtensionHeader: Bool {

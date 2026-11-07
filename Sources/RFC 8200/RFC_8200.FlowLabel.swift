@@ -1,20 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// Copyright (c) 2025 Coen ten Thije Boonkkamp
-// Licensed under Apache License v2.0
-//
-// See LICENSE.txt for license information
-// See CONTRIBUTORS.txt for the list of project contributors
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-// ===----------------------------------------------------------------------===//
-
-// RFC_8200.FlowLabel.swift
-// swift-rfc-8200
-//
-// RFC 8200 Section 6: Flow Label
-
 extension RFC_8200 {
     /// Flow Label field (20 bits)
     ///
@@ -35,7 +18,6 @@ extension RFC_8200 {
         public let rawValue: UInt32
 
         public init(rawValue: UInt32) {
-            // Mask to 20 bits
             self.rawValue = rawValue & 0xFFFFF
         }
 
