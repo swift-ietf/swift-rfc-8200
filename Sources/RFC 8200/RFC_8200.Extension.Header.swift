@@ -1,7 +1,6 @@
 import Binary
 import Byte
 
-
 extension RFC_8200.Extension {
     /// Generic extension header format
     ///
@@ -15,10 +14,12 @@ extension RFC_8200.Extension {
 
         /// Header length in 8-octet units (excluding first 8 octets)
         public let headerLength: UInt8
+    }
+}
 
-        /// The full length of the header in bytes
-        public var lengthInBytes: Int {
-            (Int(headerLength) + 1) * 8
-        }
+extension RFC_8200.Extension.Header {
+    /// The full length of the header in bytes
+    public var lengthInBytes: Int {
+        (Int(headerLength) + 1) * 8
     }
 }

@@ -31,70 +31,72 @@ extension RFC_8200 {
         init(__unchecked: Void, rawValue: UInt8) {
             self.rawValue = rawValue
         }
+    }
+}
 
-        /// Hop-by-Hop Options (0)
-        public static let hopByHop = Self(__unchecked: (), rawValue: 0)
+extension RFC_8200.NextHeader {
+    /// Hop-by-Hop Options (0)
+    public static let hopByHop = Self(__unchecked: (), rawValue: 0)
 
-        /// Routing Header (43)
-        public static let routing = Self(__unchecked: (), rawValue: 43)
+    /// Routing Header (43)
+    public static let routing = Self(__unchecked: (), rawValue: 43)
 
-        /// Fragment Header (44)
-        public static let fragment = Self(__unchecked: (), rawValue: 44)
+    /// Fragment Header (44)
+    public static let fragment = Self(__unchecked: (), rawValue: 44)
 
-        /// Encapsulating Security Payload (50)
-        public static let esp = Self(__unchecked: (), rawValue: 50)
+    /// Encapsulating Security Payload (50)
+    public static let esp = Self(__unchecked: (), rawValue: 50)
 
-        /// Authentication Header (51)
-        public static let ah = Self(__unchecked: (), rawValue: 51)
+    /// Authentication Header (51)
+    public static let ah = Self(__unchecked: (), rawValue: 51)
 
-        /// Destination Options (60)
-        public static let destinationOptions = Self(__unchecked: (), rawValue: 60)
+    /// Destination Options (60)
+    public static let destinationOptions = Self(__unchecked: (), rawValue: 60)
 
-        /// Mobility Header (135)
-        public static let mobility = Self(__unchecked: (), rawValue: 135)
+    /// Mobility Header (135)
+    public static let mobility = Self(__unchecked: (), rawValue: 135)
 
-        /// Host Identity Protocol (139)
-        public static let hip = Self(__unchecked: (), rawValue: 139)
+    /// Host Identity Protocol (139)
+    public static let hip = Self(__unchecked: (), rawValue: 139)
 
-        /// Shim6 Protocol (140)
-        public static let shim6 = Self(__unchecked: (), rawValue: 140)
+    /// Shim6 Protocol (140)
+    public static let shim6 = Self(__unchecked: (), rawValue: 140)
 
-        /// TCP (6)
-        public static let tcp = Self(__unchecked: (), rawValue: 6)
+    /// TCP (6)
+    public static let tcp = Self(__unchecked: (), rawValue: 6)
 
-        /// UDP (17)
-        public static let udp = Self(__unchecked: (), rawValue: 17)
+    /// UDP (17)
+    public static let udp = Self(__unchecked: (), rawValue: 17)
 
-        /// ICMPv6 (58)
-        public static let icmpv6 = Self(__unchecked: (), rawValue: 58)
+    /// ICMPv6 (58)
+    public static let icmpv6 = Self(__unchecked: (), rawValue: 58)
 
-        // swift-format-ignore: DontRepeatTypeInStaticProperties
-        /// No Next Header (59)
-        ///
-        /// Indicates that there is no next header. The payload length
-        /// still indicates the length of the payload.
-        public static let noNextHeader = Self(__unchecked: (), rawValue: 59)
+    // swift-format-ignore: DontRepeatTypeInStaticProperties
+    /// No Next Header (59)
+    ///
+    /// Indicates that there is no next header. The payload length
+    /// still indicates the length of the payload.
+    public static let noNextHeader = Self(__unchecked: (), rawValue: 59)
 
-        /// GRE (47)
-        public static let gre = Self(__unchecked: (), rawValue: 47)
+    /// GRE (47)
+    public static let gre = Self(__unchecked: (), rawValue: 47)
 
-        /// SCTP (132)
-        public static let sctp = Self(__unchecked: (), rawValue: 132)
+    /// SCTP (132)
+    public static let sctp = Self(__unchecked: (), rawValue: 132)
 
-        /// Whether this is an extension header
-        public var isExtensionHeader: Bool {
-            switch rawValue {
-            case 0, 43, 44, 50, 51, 60, 135, 139, 140:
-                return true
-            default:
-                return false
-            }
+    /// Whether this is an extension header
+    public var isExtensionHeader: Bool {
+        switch rawValue {
+        case 0, 43, 44, 50, 51, 60, 135, 139, 140:
+            return true
+        default:
+            return false
         }
+    }
 
-        /// Whether this is an upper layer protocol
-        public var isUpperLayerProtocol: Bool {
-            !isExtensionHeader && rawValue != 59
-        }
+    /// Whether this is an upper layer protocol
+    public var isUpperLayerProtocol: Bool {
+        !isExtensionHeader && rawValue != 59
     }
 }
 

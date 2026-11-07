@@ -25,15 +25,17 @@ extension RFC_8200 {
         init(__unchecked: Void, rawValue: UInt32) {
             self.rawValue = rawValue
         }
+    }
+}
 
-        /// Zero flow label (no flow identification)
-        public static let zero = Self(__unchecked: (), rawValue: 0)
+extension RFC_8200.FlowLabel {
+    /// Zero flow label (no flow identification)
+    public static let zero = Self(__unchecked: (), rawValue: 0)
 
-        /// Maximum flow label value
-        public static let max = Self(__unchecked: (), rawValue: 0xFFFFF)
+    /// Maximum flow label value
+    public static let max = Self(__unchecked: (), rawValue: 0xFFFFF)
 
-        public static func < (lhs: Self, rhs: Self) -> Bool {
-            lhs.rawValue < rhs.rawValue
-        }
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.rawValue < rhs.rawValue
     }
 }
