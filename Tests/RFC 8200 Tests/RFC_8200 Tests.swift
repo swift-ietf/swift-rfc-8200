@@ -13,9 +13,15 @@
 import Testing
 @testable import RFC_8200
 
-@Suite
-struct `RFC 8200 IPv6 Packet Tests` {
+enum `RFC_8200 Tests` {}
 
+extension `RFC_8200 Tests` {
+    @Suite
+    struct `RFC 8200 IPv6 Packet Tests` {
+    }
+}
+
+extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
     @Suite
     struct `Constants Tests` {
         @Test
