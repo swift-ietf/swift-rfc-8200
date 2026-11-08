@@ -1,7 +1,6 @@
 import Binary
 import Byte
 
-
 extension RFC_8200.Extension {
     /// Fragment Header (RFC 8200 Section 4.5)
     ///
