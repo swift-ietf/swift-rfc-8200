@@ -192,6 +192,27 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
         }
 
         @Test
+        func `Parse from offset slice with trailing payload`() throws {
+            let original = RFC_8200.Header(
+                trafficClass: RFC_8200.TrafficClass(dscp: 46, ecn: 2),
+                flowLabel: RFC_8200.FlowLabel(rawValue: 0xABCDE),
+                payloadLength: 8,
+                nextHeader: .tcp,
+                hopLimit: 64,
+                source: RFC_4291.IPv6.Address(0xfe80, 0, 0, 0, 0, 0, 0, 1),
+                destination: RFC_4291.IPv6.Address(0xfe80, 0, 0, 0, 0, 0, 0, 2)
+            )
+
+            var buffer: [Byte] = Array(repeating: Byte(0xFF), count: 3)
+            RFC_8200.Header.serialize(original, into: &buffer)
+            buffer.append(contentsOf: Array(repeating: Byte(0xEE), count: 8))
+
+            let parsed = try RFC_8200.Header(binary: buffer[3...])
+
+            #expect(parsed == original)
+        }
+
+        @Test
         func `Reject short buffer`() {
             let shortBuffer: [Byte] = Array(repeating: Byte(0), count: 39)
 

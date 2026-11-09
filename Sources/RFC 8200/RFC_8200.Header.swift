@@ -125,16 +125,12 @@ extension RFC_8200.Header: Binary.Serializable {
             throw Error.invalidLength(bytes.count)
         }
 
-        var iterator = bytes.makeIterator()
+        let octets = Array(bytes.prefix(40))
 
-        func next() -> UInt8 {
-            iterator.next()!.bitPattern
-        }
-
-        let byte0 = next()
-        let byte1 = next()
-        let byte2 = next()
-        let byte3 = next()
+        let byte0 = octets[0].bitPattern
+        let byte1 = octets[1].bitPattern
+        let byte2 = octets[2].bitPattern
+        let byte3 = octets[3].bitPattern
 
         let version = (byte0 >> 4) & 0x0F
         guard version == 6 else {
@@ -147,30 +143,22 @@ extension RFC_8200.Header: Binary.Serializable {
         let fl = (UInt32(byte1 & 0x0F) << 16) | (UInt32(byte2) << 8) | UInt32(byte3)
         self.flowLabel = RFC_8200.FlowLabel(rawValue: fl)
 
-        let pl0 = next()
-        let pl1 = next()
+        let pl0 = octets[4].bitPattern
+        let pl1 = octets[5].bitPattern
         self.payloadLength = (UInt16(pl0) << 8) | UInt16(pl1)
 
-        self.nextHeader = RFC_8200.NextHeader(rawValue: next())
+        self.nextHeader = RFC_8200.NextHeader(rawValue: octets[6].bitPattern)
 
-        self.hopLimit = next()
+        self.hopLimit = octets[7].bitPattern
 
-        var sourceBytes: [Byte] = []
-        sourceBytes.reserveCapacity(16)
-        for _ in 0..<16 {
-            sourceBytes.append(Byte(next()))
-        }
+        let sourceBytes = Array(octets[8..<24])
         do throws(RFC_4291.IPv6.Address.Error) {
             self.source = try RFC_4291.IPv6.Address(binary: sourceBytes)
         } catch {
             throw Error.invalidSourceAddress(error)
         }
 
-        var destBytes: [Byte] = []
-        destBytes.reserveCapacity(16)
-        for _ in 0..<16 {
-            destBytes.append(Byte(next()))
-        }
+        let destBytes = Array(octets[24..<40])
         do throws(RFC_4291.IPv6.Address.Error) {
             self.destination = try RFC_4291.IPv6.Address(binary: destBytes)
         } catch {
