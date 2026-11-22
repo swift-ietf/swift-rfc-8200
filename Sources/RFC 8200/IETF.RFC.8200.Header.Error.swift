@@ -1,6 +1,6 @@
 public import RFC_4291
 
-extension RFC_8200.Header {
+extension IETF.RFC.`8200`.Header {
     /// Errors that can occur when parsing IPv6 headers
     public enum Error: Swift.Error, Sendable, Equatable {
         /// The byte sequence is too short (need at least 40 bytes)
@@ -10,14 +10,14 @@ extension RFC_8200.Header {
         case invalidVersion(_ version: UInt8)
 
         /// The source address could not be parsed
-        case invalidSourceAddress(_ underlying: RFC_4291.IPv6.Address.Error)
+        case invalidSourceAddress(_ underlying: IETF.RFC.`4291`.IPv6.Address.Error)
 
         /// The destination address could not be parsed
-        case invalidDestinationAddress(_ underlying: RFC_4291.IPv6.Address.Error)
+        case invalidDestinationAddress(_ underlying: IETF.RFC.`4291`.IPv6.Address.Error)
     }
 }
 
-extension RFC_8200.Header.Error: CustomStringConvertible {
+extension IETF.RFC.`8200`.Header.Error: CustomStringConvertible {
     public var description: String {
         switch self {
         case .invalidLength(let length):

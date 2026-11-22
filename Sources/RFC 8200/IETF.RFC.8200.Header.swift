@@ -2,7 +2,7 @@ public import Binary
 public import Byte
 public import RFC_4291
 
-extension RFC_8200 {
+extension IETF.RFC.`8200` {
     /// IPv6 Header (40 bytes)
     ///
     /// The fixed-length 40-byte header as defined in RFC 8200 Section 3.
@@ -59,10 +59,10 @@ extension RFC_8200 {
         public let hopLimit: UInt8
 
         /// Source Address (128 bits)
-        public let source: RFC_4291.IPv6.Address
+        public let source: IETF.RFC.`4291`.IPv6.Address
 
         /// Destination Address (128 bits)
-        public let destination: RFC_4291.IPv6.Address
+        public let destination: IETF.RFC.`4291`.IPv6.Address
 
         /// Creates an IPv6 header
         public init(
@@ -71,8 +71,8 @@ extension RFC_8200 {
             payloadLength: UInt16,
             nextHeader: NextHeader,
             hopLimit: UInt8,
-            source: RFC_4291.IPv6.Address,
-            destination: RFC_4291.IPv6.Address
+            source: IETF.RFC.`4291`.IPv6.Address,
+            destination: IETF.RFC.`4291`.IPv6.Address
         ) {
             self.trafficClass = trafficClass
             self.flowLabel = flowLabel
@@ -85,7 +85,7 @@ extension RFC_8200 {
     }
 }
 
-extension RFC_8200.Header: Binary.Serializable {
+extension IETF.RFC.`8200`.Header: Binary.Serializable {
     /// Serializes the IPv6 header to wire format (40 bytes)
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ header: Self,
@@ -110,9 +110,9 @@ extension RFC_8200.Header: Binary.Serializable {
 
         buffer.append(Byte(header.hopLimit))
 
-        RFC_4291.IPv6.Address.serialize(header.source, into: &buffer)
+        IETF.RFC.`4291`.IPv6.Address.serialize(header.source, into: &buffer)
 
-        RFC_4291.IPv6.Address.serialize(header.destination, into: &buffer)
+        IETF.RFC.`4291`.IPv6.Address.serialize(header.destination, into: &buffer)
     }
 
     /// Parses an IPv6 header from wire format bytes
@@ -138,29 +138,29 @@ extension RFC_8200.Header: Binary.Serializable {
         }
 
         let tc = ((byte0 & 0x0F) << 4) | ((byte1 >> 4) & 0x0F)
-        self.trafficClass = RFC_8200.TrafficClass(rawValue: tc)
+        self.trafficClass = IETF.RFC.`8200`.TrafficClass(rawValue: tc)
 
         let fl = (UInt32(byte1 & 0x0F) << 16) | (UInt32(byte2) << 8) | UInt32(byte3)
-        self.flowLabel = RFC_8200.FlowLabel(rawValue: fl)
+        self.flowLabel = IETF.RFC.`8200`.FlowLabel(rawValue: fl)
 
         let pl0 = octets[4].bitPattern
         let pl1 = octets[5].bitPattern
         self.payloadLength = (UInt16(pl0) << 8) | UInt16(pl1)
 
-        self.nextHeader = RFC_8200.NextHeader(rawValue: octets[6].bitPattern)
+        self.nextHeader = IETF.RFC.`8200`.NextHeader(rawValue: octets[6].bitPattern)
 
         self.hopLimit = octets[7].bitPattern
 
         let sourceBytes = Array(octets[8..<24])
-        do throws(RFC_4291.IPv6.Address.Error) {
-            self.source = try RFC_4291.IPv6.Address(binary: sourceBytes)
+        do throws(IETF.RFC.`4291`.IPv6.Address.Error) {
+            self.source = try IETF.RFC.`4291`.IPv6.Address(binary: sourceBytes)
         } catch {
             throw Error.invalidSourceAddress(error)
         }
 
         let destBytes = Array(octets[24..<40])
-        do throws(RFC_4291.IPv6.Address.Error) {
-            self.destination = try RFC_4291.IPv6.Address(binary: destBytes)
+        do throws(IETF.RFC.`4291`.IPv6.Address.Error) {
+            self.destination = try IETF.RFC.`4291`.IPv6.Address(binary: destBytes)
         } catch {
             throw Error.invalidDestinationAddress(error)
         }

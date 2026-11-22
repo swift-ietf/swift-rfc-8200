@@ -1,7 +1,7 @@
 import Binary
 import Byte
 
-extension RFC_8200.Extension {
+extension IETF.RFC.`8200`.Extension {
     /// Fragment Header (RFC 8200 Section 4.5)
     ///
     /// Used when a packet is too large to fit in the path MTU.
@@ -21,7 +21,7 @@ extension RFC_8200.Extension {
     /// ```
     public struct Fragment: Sendable, Hashable {
         /// Next header type
-        public let nextHeader: RFC_8200.NextHeader
+        public let nextHeader: IETF.RFC.`8200`.NextHeader
 
         /// Fragment offset in 8-octet units
         public let fragmentOffset: UInt16
@@ -34,7 +34,7 @@ extension RFC_8200.Extension {
 
         /// Creates a Fragment header
         public init(
-            nextHeader: RFC_8200.NextHeader,
+            nextHeader: IETF.RFC.`8200`.NextHeader,
             fragmentOffset: UInt16,
             moreFragments: Bool,
             identification: UInt32

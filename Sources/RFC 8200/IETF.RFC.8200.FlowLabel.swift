@@ -1,4 +1,4 @@
-extension RFC_8200 {
+extension IETF.RFC.`8200` {
     /// Flow Label field (20 bits)
     ///
     /// The Flow Label is used to identify packets belonging to the same flow.
@@ -28,7 +28,7 @@ extension RFC_8200 {
     }
 }
 
-extension RFC_8200.FlowLabel {
+extension IETF.RFC.`8200`.FlowLabel {
     /// Zero flow label (no flow identification)
     public static let zero = Self(__unchecked: (), rawValue: 0)
 

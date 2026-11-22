@@ -1,3 +1,4 @@
+public import IETF_RFC
 /// RFC 8200: Internet Protocol, Version 6 (IPv6) Specification
 ///
 /// This namespace contains types for the IPv6 packet format as defined
@@ -53,9 +54,11 @@
 ///
 /// - [RFC 8200](https://www.rfc-editor.org/rfc/rfc8200)
 /// - ``RFC_4291`` for IPv6 addressing
-public enum RFC_8200 {}
+extension IETF.RFC {
+    public enum `8200` {}
+}
 
-extension RFC_8200 {
+extension IETF.RFC.`8200` {
     /// IPv6 protocol version
     ///
     /// Always 6 for IPv6 packets.

@@ -1,7 +1,7 @@
 import Binary
 import Byte
 
-extension RFC_8200.Extension {
+extension IETF.RFC.`8200`.Extension {
     /// Generic extension header format
     ///
     /// Most extension headers (except Fragment) follow this format:
@@ -10,14 +10,14 @@ extension RFC_8200.Extension {
     /// - Type-specific data
     public struct Header: Sendable, Hashable {
         /// Next header type
-        public let nextHeader: RFC_8200.NextHeader
+        public let nextHeader: IETF.RFC.`8200`.NextHeader
 
         /// Header length in 8-octet units (excluding first 8 octets)
         public let headerLength: UInt8
     }
 }
 
-extension RFC_8200.Extension.Header {
+extension IETF.RFC.`8200`.Extension.Header {
     /// The full length of the header in bytes
     public var lengthInBytes: Int {
         (Int(headerLength) + 1) * 8

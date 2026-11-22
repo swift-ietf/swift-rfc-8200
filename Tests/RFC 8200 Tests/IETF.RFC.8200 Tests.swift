@@ -13,25 +13,25 @@
 import Testing
 @testable import RFC_8200
 
-enum `RFC_8200 Tests` {}
+enum `IETF.RFC.8200 Tests` {}
 
-extension `RFC_8200 Tests` {
+extension `IETF.RFC.8200 Tests` {
     @Suite
     struct `RFC 8200 IPv6 Packet Tests` {
     }
 }
 
-extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
+extension `IETF.RFC.8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
     @Suite
     struct `Constants Tests` {
         @Test
         func `Version is 6`() {
-            #expect(RFC_8200.version == 6)
+            #expect(IETF.RFC.`8200`.version == 6)
         }
 
         @Test
         func `Header size is 40 bytes`() {
-            #expect(RFC_8200.headerSize == 40)
+            #expect(IETF.RFC.`8200`.headerSize == 40)
         }
     }
 
@@ -39,36 +39,36 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
     struct `NextHeader Tests` {
         @Test
         func `Extension header values`() {
-            #expect(RFC_8200.NextHeader.hopByHop.rawValue == 0)
-            #expect(RFC_8200.NextHeader.routing.rawValue == 43)
-            #expect(RFC_8200.NextHeader.fragment.rawValue == 44)
-            #expect(RFC_8200.NextHeader.esp.rawValue == 50)
-            #expect(RFC_8200.NextHeader.ah.rawValue == 51)
-            #expect(RFC_8200.NextHeader.destinationOptions.rawValue == 60)
+            #expect(IETF.RFC.`8200`.NextHeader.hopByHop.rawValue == 0)
+            #expect(IETF.RFC.`8200`.NextHeader.routing.rawValue == 43)
+            #expect(IETF.RFC.`8200`.NextHeader.fragment.rawValue == 44)
+            #expect(IETF.RFC.`8200`.NextHeader.esp.rawValue == 50)
+            #expect(IETF.RFC.`8200`.NextHeader.ah.rawValue == 51)
+            #expect(IETF.RFC.`8200`.NextHeader.destinationOptions.rawValue == 60)
         }
 
         @Test
         func `Upper layer protocol values`() {
-            #expect(RFC_8200.NextHeader.tcp.rawValue == 6)
-            #expect(RFC_8200.NextHeader.udp.rawValue == 17)
-            #expect(RFC_8200.NextHeader.icmpv6.rawValue == 58)
-            #expect(RFC_8200.NextHeader.noNextHeader.rawValue == 59)
+            #expect(IETF.RFC.`8200`.NextHeader.tcp.rawValue == 6)
+            #expect(IETF.RFC.`8200`.NextHeader.udp.rawValue == 17)
+            #expect(IETF.RFC.`8200`.NextHeader.icmpv6.rawValue == 58)
+            #expect(IETF.RFC.`8200`.NextHeader.noNextHeader.rawValue == 59)
         }
 
         @Test
         func `Extension header classification`() {
-            #expect(RFC_8200.NextHeader.hopByHop.isExtensionHeader == true)
-            #expect(RFC_8200.NextHeader.fragment.isExtensionHeader == true)
-            #expect(RFC_8200.NextHeader.tcp.isExtensionHeader == false)
-            #expect(RFC_8200.NextHeader.udp.isExtensionHeader == false)
+            #expect(IETF.RFC.`8200`.NextHeader.hopByHop.isExtensionHeader == true)
+            #expect(IETF.RFC.`8200`.NextHeader.fragment.isExtensionHeader == true)
+            #expect(IETF.RFC.`8200`.NextHeader.tcp.isExtensionHeader == false)
+            #expect(IETF.RFC.`8200`.NextHeader.udp.isExtensionHeader == false)
         }
 
         @Test
         func `Upper layer classification`() {
-            #expect(RFC_8200.NextHeader.tcp.isUpperLayerProtocol == true)
-            #expect(RFC_8200.NextHeader.udp.isUpperLayerProtocol == true)
-            #expect(RFC_8200.NextHeader.hopByHop.isUpperLayerProtocol == false)
-            #expect(RFC_8200.NextHeader.noNextHeader.isUpperLayerProtocol == false)
+            #expect(IETF.RFC.`8200`.NextHeader.tcp.isUpperLayerProtocol == true)
+            #expect(IETF.RFC.`8200`.NextHeader.udp.isUpperLayerProtocol == true)
+            #expect(IETF.RFC.`8200`.NextHeader.hopByHop.isUpperLayerProtocol == false)
+            #expect(IETF.RFC.`8200`.NextHeader.noNextHeader.isUpperLayerProtocol == false)
         }
     }
 
@@ -76,19 +76,19 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
     struct `TrafficClass Tests` {
         @Test
         func `Default is zero`() {
-            #expect(RFC_8200.TrafficClass.default.rawValue == 0)
+            #expect(IETF.RFC.`8200`.TrafficClass.default.rawValue == 0)
         }
 
         @Test
         func `DSCP and ECN extraction`() {
-            let tc = RFC_8200.TrafficClass(dscp: 46, ecn: 2)
+            let tc = IETF.RFC.`8200`.TrafficClass(dscp: 46, ecn: 2)
             #expect(tc.dscp == 46)
             #expect(tc.ecn == 2)
         }
 
         @Test
         func `Expedited Forwarding`() {
-            #expect(RFC_8200.TrafficClass.ef.dscp == 46)
+            #expect(IETF.RFC.`8200`.TrafficClass.ef.dscp == 46)
         }
     }
 
@@ -96,17 +96,17 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
     struct `FlowLabel Tests` {
         @Test
         func `Zero flow label`() {
-            #expect(RFC_8200.FlowLabel.zero.rawValue == 0)
+            #expect(IETF.RFC.`8200`.FlowLabel.zero.rawValue == 0)
         }
 
         @Test
         func `Max flow label is 20 bits`() {
-            #expect(RFC_8200.FlowLabel.max.rawValue == 0xFFFFF)
+            #expect(IETF.RFC.`8200`.FlowLabel.max.rawValue == 0xFFFFF)
         }
 
         @Test
         func `Values are masked to 20 bits`() {
-            let fl = RFC_8200.FlowLabel(rawValue: 0xFFFF_FFFF)
+            let fl = IETF.RFC.`8200`.FlowLabel(rawValue: 0xFFFF_FFFF)
             #expect(fl.rawValue == 0xFFFFF)
         }
     }
@@ -115,7 +115,7 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
     struct `Header Tests` {
         @Test
         func `Create basic header`() {
-            let header = RFC_8200.Header(
+            let header = IETF.RFC.`8200`.Header(
                 trafficClass: .default,
                 flowLabel: .zero,
                 payloadLength: 100,
@@ -132,7 +132,7 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
 
         @Test
         func `Serialize to 40 bytes`() {
-            let header = RFC_8200.Header(
+            let header = IETF.RFC.`8200`.Header(
                 trafficClass: .default,
                 flowLabel: .zero,
                 payloadLength: 0,
@@ -143,14 +143,14 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
             )
 
             var buffer: [Byte] = []
-            RFC_8200.Header.serialize(header, into: &buffer)
+            IETF.RFC.`8200`.Header.serialize(header, into: &buffer)
 
             #expect(buffer.count == 40)
         }
 
         @Test
         func `Version field is 6`() {
-            let header = RFC_8200.Header(
+            let header = IETF.RFC.`8200`.Header(
                 payloadLength: 0,
                 nextHeader: .tcp,
                 hopLimit: 64,
@@ -159,7 +159,7 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
             )
 
             var buffer: [Byte] = []
-            RFC_8200.Header.serialize(header, into: &buffer)
+            IETF.RFC.`8200`.Header.serialize(header, into: &buffer)
 
             let version = (buffer[0].bitPattern >> 4) & 0x0F
             #expect(version == 6)
@@ -167,20 +167,20 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
 
         @Test
         func `Serialization round-trip`() throws {
-            let original = RFC_8200.Header(
-                trafficClass: RFC_8200.TrafficClass(dscp: 10, ecn: 1),
-                flowLabel: RFC_8200.FlowLabel(rawValue: 0x12345),
+            let original = IETF.RFC.`8200`.Header(
+                trafficClass: IETF.RFC.`8200`.TrafficClass(dscp: 10, ecn: 1),
+                flowLabel: IETF.RFC.`8200`.FlowLabel(rawValue: 0x12345),
                 payloadLength: 1024,
                 nextHeader: .udp,
                 hopLimit: 128,
-                source: RFC_4291.IPv6.Address(0x2001, 0xdb8, 0, 0, 0, 0, 0, 1),
-                destination: RFC_4291.IPv6.Address(0x2001, 0xdb8, 0, 0, 0, 0, 0, 2)
+                source: IETF.RFC.`4291`.IPv6.Address(0x2001, 0xdb8, 0, 0, 0, 0, 0, 1),
+                destination: IETF.RFC.`4291`.IPv6.Address(0x2001, 0xdb8, 0, 0, 0, 0, 0, 2)
             )
 
             var buffer: [Byte] = []
-            RFC_8200.Header.serialize(original, into: &buffer)
+            IETF.RFC.`8200`.Header.serialize(original, into: &buffer)
 
-            let parsed = try RFC_8200.Header(binary: buffer)
+            let parsed = try IETF.RFC.`8200`.Header(binary: buffer)
 
             #expect(parsed.trafficClass == original.trafficClass)
             #expect(parsed.flowLabel == original.flowLabel)
@@ -193,21 +193,21 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
 
         @Test
         func `Parse from offset slice with trailing payload`() throws {
-            let original = RFC_8200.Header(
-                trafficClass: RFC_8200.TrafficClass(dscp: 46, ecn: 2),
-                flowLabel: RFC_8200.FlowLabel(rawValue: 0xABCDE),
+            let original = IETF.RFC.`8200`.Header(
+                trafficClass: IETF.RFC.`8200`.TrafficClass(dscp: 46, ecn: 2),
+                flowLabel: IETF.RFC.`8200`.FlowLabel(rawValue: 0xABCDE),
                 payloadLength: 8,
                 nextHeader: .tcp,
                 hopLimit: 64,
-                source: RFC_4291.IPv6.Address(0xfe80, 0, 0, 0, 0, 0, 0, 1),
-                destination: RFC_4291.IPv6.Address(0xfe80, 0, 0, 0, 0, 0, 0, 2)
+                source: IETF.RFC.`4291`.IPv6.Address(0xfe80, 0, 0, 0, 0, 0, 0, 1),
+                destination: IETF.RFC.`4291`.IPv6.Address(0xfe80, 0, 0, 0, 0, 0, 0, 2)
             )
 
             var buffer: [Byte] = Array(repeating: Byte(0xFF), count: 3)
-            RFC_8200.Header.serialize(original, into: &buffer)
+            IETF.RFC.`8200`.Header.serialize(original, into: &buffer)
             buffer.append(contentsOf: Array(repeating: Byte(0xEE), count: 8))
 
-            let parsed = try RFC_8200.Header(binary: buffer[3...])
+            let parsed = try IETF.RFC.`8200`.Header(binary: buffer[3...])
 
             #expect(parsed == original)
         }
@@ -216,8 +216,8 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
         func `Reject short buffer`() {
             let shortBuffer: [Byte] = Array(repeating: Byte(0), count: 39)
 
-            #expect(throws: RFC_8200.Header.Error.self) {
-                try RFC_8200.Header(binary: shortBuffer)
+            #expect(throws: IETF.RFC.`8200`.Header.Error.self) {
+                try IETF.RFC.`8200`.Header(binary: shortBuffer)
             }
         }
 
@@ -226,8 +226,8 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
             var buffer: [Byte] = Array(repeating: Byte(0), count: 40)
             buffer[0] = Byte(0x40)  // Version 4 instead of 6
 
-            #expect(throws: RFC_8200.Header.Error.self) {
-                try RFC_8200.Header(binary: buffer)
+            #expect(throws: IETF.RFC.`8200`.Header.Error.self) {
+                try IETF.RFC.`8200`.Header(binary: buffer)
             }
         }
     }
@@ -236,7 +236,7 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
     struct `Fragment Header Tests` {
         @Test
         func `Create fragment header`() {
-            let fragment = RFC_8200.Extension.Fragment(
+            let fragment = IETF.RFC.`8200`.Extension.Fragment(
                 nextHeader: .tcp,
                 fragmentOffset: 100,
                 moreFragments: true,
@@ -251,7 +251,7 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
 
         @Test
         func `Serialize fragment header to 8 bytes`() {
-            let fragment = RFC_8200.Extension.Fragment(
+            let fragment = IETF.RFC.`8200`.Extension.Fragment(
                 nextHeader: .tcp,
                 fragmentOffset: 0,
                 moreFragments: false,
@@ -259,7 +259,7 @@ extension `RFC_8200 Tests`.`RFC 8200 IPv6 Packet Tests` {
             )
 
             var buffer: [Byte] = []
-            RFC_8200.Extension.Fragment.serialize(fragment, into: &buffer)
+            IETF.RFC.`8200`.Extension.Fragment.serialize(fragment, into: &buffer)
 
             #expect(buffer.count == 8)
         }

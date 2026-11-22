@@ -1,4 +1,4 @@
-extension RFC_8200 {
+extension IETF.RFC.`8200` {
     /// Traffic Class field (8 bits)
     ///
     /// The Traffic Class field in the IPv6 header is divided into:
@@ -35,7 +35,7 @@ extension RFC_8200 {
     }
 }
 
-extension RFC_8200.TrafficClass {
+extension IETF.RFC.`8200`.TrafficClass {
     /// Differentiated Services Code Point (6 bits)
     public var dscp: UInt8 {
         (rawValue >> 2) & 0x3F

@@ -1,7 +1,7 @@
 public import Binary
 public import Byte
 
-extension RFC_8200 {
+extension IETF.RFC.`8200` {
     /// Extension headers namespace
     ///
     /// IPv6 extension headers provide optional internet-layer information
@@ -22,13 +22,13 @@ extension RFC_8200 {
     public enum Extension {}
 }
 
-extension RFC_8200.Extension {
+extension IETF.RFC.`8200`.Extension {
 }
 
-extension RFC_8200.Extension {
+extension IETF.RFC.`8200`.Extension {
 }
 
-extension RFC_8200.Extension.Fragment: Binary.Serializable {
+extension IETF.RFC.`8200`.Extension.Fragment: Binary.Serializable {
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ fragment: Self,
         into buffer: inout Buffer

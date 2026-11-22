@@ -1,4 +1,4 @@
-extension RFC_8200 {
+extension IETF.RFC.`8200` {
     /// Next Header field values
     ///
     /// The Next Header field identifies the type of header immediately following
@@ -34,7 +34,7 @@ extension RFC_8200 {
     }
 }
 
-extension RFC_8200.NextHeader {
+extension IETF.RFC.`8200`.NextHeader {
     /// Hop-by-Hop Options (0)
     public static let hopByHop = Self(__unchecked: (), rawValue: 0)
 
@@ -100,7 +100,7 @@ extension RFC_8200.NextHeader {
     }
 }
 
-extension RFC_8200.NextHeader: CustomStringConvertible {
+extension IETF.RFC.`8200`.NextHeader: CustomStringConvertible {
     public var description: String {
         switch rawValue {
         case 0: return "Hop-by-Hop Options"

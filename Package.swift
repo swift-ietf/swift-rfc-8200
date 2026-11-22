@@ -15,6 +15,7 @@ let package = Package(
         .library(name: "RFC 8200", targets: ["RFC 8200"])
     ],
     dependencies: [
+        .package(url: "https://github.com/swift-ietf/swift-rfc.git", branch: "main"),
         .package(url: "https://github.com/swift-ietf/swift-rfc-4291.git", branch: "main", traits: ["Coder"]),
         .package(url: "https://github.com/swift-ietf/swift-rfc-5952.git", branch: "main", traits: ["Coder"]),
         .package(url: "https://github.com/swift-atoms/swift-standard-library-extensions.git", branch: "main"),
@@ -26,6 +27,7 @@ let package = Package(
         .target(
             name: "RFC 8200",
             dependencies: [
+                .product(name: "IETF RFC", package: "swift-rfc"),
                 .product(name: "RFC 4291", package: "swift-rfc-4291"),
                 .product(name: "RFC 5952", package: "swift-rfc-5952"),
                 .product(name: "Standard Library Extensions", package: "swift-standard-library-extensions"),
