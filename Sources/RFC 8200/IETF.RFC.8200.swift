@@ -1,4 +1,5 @@
 public import IETF_RFC
+
 /// RFC 8200: Internet Protocol, Version 6 (IPv6) Specification
 ///
 /// This namespace contains types for the IPv6 packet format as defined
